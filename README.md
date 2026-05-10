@@ -8,8 +8,17 @@
 ![Verification](https://img.shields.io/badge/verification-playwright%20screenshots-2ea44f)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Status](https://img.shields.io/badge/status-local%20prototype-f59e0b)
+[![Live Demo](https://img.shields.io/badge/live-demo-16a34a)](https://cell-architecture-studio-inky.vercel.app)
 
 An interactive cell architecture gallery built with React, Vite, Three.js, and staged GLB or procedural 3D cell assets. The project recreates a premium educational biology interface with selectable cell types, organelle details, comparison mode, responsive layout, and visual verification coverage.
+
+## Live Demo
+
+[Open the live Vercel deployment](https://cell-architecture-studio-inky.vercel.app)
+
+<video src="https://github.com/cclank/cell-architecture-studio/raw/main/docs/media/cell-architecture-studio-demo.mp4" controls muted playsinline width="100%"></video>
+
+[View the demo video file](docs/media/cell-architecture-studio-demo.mp4)
 
 ## Highlights
 
@@ -42,6 +51,7 @@ An interactive cell architecture gallery built with React, Vite, Three.js, and s
 ```text
 .
 |-- docs/
+|   |-- media/
 |   `-- ASSETS.md
 |-- public/
 |   |-- cell-renders/
