@@ -113,58 +113,6 @@ a {
   letter-spacing: 0;
 }
 
-.top-nav {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex: 0 0 auto;
-  animation: fade-in 620ms ease both;
-}
-
-.top-nav a,
-.avatar-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-height: 44px;
-  color: #2f2a23;
-}
-
-.top-nav a {
-  flex-direction: column;
-  min-width: 64px;
-  font-size: 0.9rem;
-}
-
-.top-nav svg {
-  stroke-width: 1.7;
-}
-
-.avatar-button {
-  padding: 4px;
-  cursor: pointer;
-  background: transparent;
-}
-
-.avatar-core {
-  width: 58px;
-  height: 58px;
-  display: grid;
-  place-items: center;
-  border: 2px solid rgba(41, 35, 28, 0.66);
-  border-radius: 50%;
-}
-
-.avatar-core span {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  box-shadow:
-    12px 4px 0 rgba(255, 255, 255, 0.68),
-    -8px 8px 0 rgba(255, 255, 255, 0.42);
-}
-
 .app-grid {
   display: grid;
   grid-template-columns: minmax(240px, 300px) minmax(560px, 1fr) minmax(300px, 380px);
@@ -638,9 +586,10 @@ a {
   transition: width 180ms ease;
 }
 
-.stage-toolbar,
-.export-toolbar {
+.stage-toolbar {
   position: absolute;
+  left: 34px;
+  bottom: 28px;
   z-index: 6;
   display: flex;
   align-items: center;
@@ -653,18 +602,7 @@ a {
   backdrop-filter: blur(12px);
 }
 
-.stage-toolbar {
-  left: 34px;
-  bottom: 28px;
-}
-
-.export-toolbar {
-  right: 34px;
-  bottom: 28px;
-}
-
-.stage-toolbar button,
-.export-toolbar button {
+.stage-toolbar button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -677,14 +615,12 @@ a {
   white-space: nowrap;
 }
 
-.stage-toolbar button:last-child,
-.export-toolbar button:last-child {
+.stage-toolbar button:last-child {
   border-right: 0;
 }
 
 .stage-toolbar button:hover,
-.stage-toolbar button.is-active,
-.export-toolbar button:hover {
+.stage-toolbar button.is-active {
   color: var(--accent);
   background: rgba(255, 255, 255, 0.5);
 }
@@ -1224,12 +1160,6 @@ a {
   }
 }
 
-@media (max-width: 1500px) {
-  .export-toolbar {
-    bottom: 86px;
-  }
-}
-
 @media (max-width: 1400px) {
   .topbar {
     gap: 18px;
@@ -1247,10 +1177,6 @@ a {
 
   .brand-block p {
     font-size: 1.05rem;
-  }
-
-  .top-nav {
-    gap: 16px;
   }
 
   .app-grid {
@@ -1289,14 +1215,6 @@ a {
   .topbar {
     align-items: flex-start;
     flex-direction: column;
-  }
-
-  .top-nav {
-    width: 100%;
-    justify-content: space-between;
-    gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 4px;
   }
 
   .brand-block h1 {
@@ -1350,7 +1268,7 @@ a {
     inset: 326px 12px 156px;
   }
 
-  .export-toolbar {
+  .stage-toolbar {
     bottom: 20px;
   }
 }
@@ -1373,30 +1291,17 @@ a {
     font-size: 0.98rem;
   }
 
-  .top-nav a span {
-    display: none;
-  }
-
-  .top-nav a {
-    min-width: 44px;
-  }
-
-  .avatar-core {
-    width: 48px;
-    height: 48px;
-  }
-
   .cell-list,
   .micro-card-row,
   .comparison-columns {
     grid-template-columns: 1fr;
   }
 
-  .center-stack {
+  .left-rail {
     order: 1;
   }
 
-  .left-rail {
+  .center-stack {
     order: 2;
   }
 
@@ -1431,24 +1336,15 @@ a {
     inset: 326px 10px 170px;
   }
 
-  .stage-toolbar,
-  .export-toolbar {
+  .stage-toolbar {
     left: 20px;
     right: 20px;
+    bottom: 20px;
     justify-content: stretch;
-  }
-
-  .stage-toolbar {
-    bottom: 78px;
     overflow-x: auto;
   }
 
-  .export-toolbar {
-    bottom: 20px;
-  }
-
-  .stage-toolbar button,
-  .export-toolbar button {
+  .stage-toolbar button {
     flex: 1 0 auto;
     padding: 0 10px;
   }

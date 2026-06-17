@@ -1,23 +1,18 @@
 import {
   ArrowRight,
-  BookOpen,
   Box,
   Brain,
-  Camera,
   ChevronDown,
   CircleDot,
   Gauge,
   EyeOff,
-  Grid3X3,
   Heart,
   Info,
   Leaf,
   MessageCircle,
-  Library,
   Microscope,
   Plus,
   RotateCcw,
-  Settings,
   Sparkles,
   Star,
   Target,
@@ -26,6 +21,7 @@ import {
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { CellScene } from "./components/CellScene";
 import { cells, getCellById, type CellItem, type ViewMode } from "./data/cells";
+import { assetUrl } from "./lib/assetUrl";
 
 type ModeOption = {
   id: ViewMode;
@@ -34,13 +30,13 @@ type ModeOption = {
 };
 
 const modeOptions: ModeOption[] = [
-  { id: "mesh", label: "Mesh", Icon: Box },
-  { id: "focus", label: "Focus", Icon: CircleDot },
+  { id: "mesh", label: "网格", Icon: Box },
+  { id: "focus", label: "聚焦", Icon: CircleDot },
 ];
 
-const initialCell = getCellById("animal");
+const initialCell = getCellById("upper-1291");
 
-function Header({ cell }: { cell: CellItem }) {
+function Header() {
   return (
     <header className="topbar">
       <div className="brand-block">
@@ -48,35 +44,10 @@ function Header({ cell }: { cell: CellItem }) {
           <Sparkles size={26} />
         </div>
         <div>
-          <h1>Cell Architecture Studio</h1>
-          <p>Explore life at the microscopic level</p>
+          <h1>排牙智导</h1>
+          <p>数字化牙弓模型与智能排牙导览</p>
         </div>
       </div>
-
-      <nav className="top-nav" aria-label="Primary">
-        <a href="#gallery">
-          <Grid3X3 size={24} />
-          <span>Gallery</span>
-        </a>
-        <a href="#library">
-          <Library size={24} />
-          <span>Library</span>
-        </a>
-        <a href="#notebooks">
-          <BookOpen size={24} />
-          <span>Notebooks</span>
-        </a>
-        <a href="#settings">
-          <Settings size={24} />
-          <span>Settings</span>
-        </a>
-        <button className="avatar-button" type="button" aria-label="User menu">
-          <span className="avatar-core" style={{ background: cell.accentSoft }}>
-            <span style={{ background: cell.accent }} />
-          </span>
-          <ChevronDown size={20} />
-        </button>
-      </nav>
     </header>
   );
 }
@@ -94,7 +65,7 @@ function MiniCell({ cell }: { cell: CellItem }) {
   if (cell.renderImage?.url) {
     return (
       <span className="mini-cell has-preview" style={{ "--thumb": cell.accent } as CSSProperties}>
-        <img src={cell.renderImage.url} alt="" aria-hidden="true" />
+        <img src={assetUrl(cell.renderImage.url)} alt="" aria-hidden="true" />
       </span>
     );
   }
@@ -102,7 +73,7 @@ function MiniCell({ cell }: { cell: CellItem }) {
   if (cell.modelAsset?.previewUrl) {
     return (
       <span className="mini-cell has-preview" style={{ "--thumb": cell.accent } as CSSProperties}>
-        <img src={cell.modelAsset.previewUrl} alt="" aria-hidden="true" />
+        <img src={assetUrl(cell.modelAsset.previewUrl)} alt="" aria-hidden="true" />
       </span>
     );
   }
@@ -130,7 +101,7 @@ function Sidebar({
         <div className="panel-heading">
           <span>
             <Leaf size={18} />
-            Cell Types
+            模型列表
           </span>
           <ChevronDown size={18} />
         </div>
@@ -158,7 +129,7 @@ function Sidebar({
                   }}
                   role="button"
                   tabIndex={0}
-                  aria-label={`Favorite ${cell.name}`}
+                  aria-label={`收藏 ${cell.name}`}
                 >
                   <Star size={18} fill="currentColor" />
                 </span>
@@ -172,7 +143,7 @@ function Sidebar({
         <div className="panel-heading">
           <span>
             <Sparkles size={16} />
-            Organelles
+            牙位分区
           </span>
           <ChevronDown size={18} />
         </div>
@@ -232,7 +203,7 @@ function Stage({
           </div>
 
           <div className="view-card">
-            <span>View Mode</span>
+            <span>视图模式</span>
             <div className="mode-switcher">
               {modeOptions.map(({ id, label, Icon }) => (
                 <button
@@ -247,7 +218,7 @@ function Stage({
               ))}
             </div>
             <label className="toggle-line">
-              <span>Cross Section</span>
+              <span>横截面</span>
               <input
                 type="checkbox"
                 checked={crossSection}
@@ -276,32 +247,22 @@ function Stage({
             onClick={() => onAutoRotateChange(!autoRotate)}
           >
             <RotateCcw size={20} />
-            Rotate
+            旋转
           </button>
           <button type="button" onClick={() => onModeChange("focus")}>
             <CircleDot size={20} />
-            Isolate
+            隔离
           </button>
           <button type="button" onClick={() => onModeChange("focus")}>
             <EyeOff size={20} />
-            Hide Others
+            隐藏其他
           </button>
           <button type="button" onClick={onReset}>
             <RotateCcw size={20} />
-            Reset View
+            重置视图
           </button>
         </div>
 
-        <div className="export-toolbar">
-          <button type="button" onClick={() => onToast("截图功能这里先做占位。")}>
-            <Camera size={20} />
-            Screenshot
-          </button>
-          <button type="button" onClick={() => onToast("GLB 导出需要接入模型导出管线。")}>
-            <Box size={20} />
-            GLB Export
-          </button>
-        </div>
       </section>
     </main>
   );
@@ -322,9 +283,9 @@ type RightPanelProps = {
 
 function buildTutorPrompts(cell: CellItem, organelle: CellItem["organelles"][number]) {
   return [
-    `Explain how ${organelle.name} helps a ${cell.name} stay alive.`,
-    `Quiz me on the visual differences between ${cell.name} and ${getCellById(cell.comparison).name}.`,
-    `Guide me through finding ${organelle.name} inside the 3D model.`,
+    `讲解 ${cell.name} 中 ${organelle.name} 的排牙要点。`,
+    `对比 ${cell.name} 与 ${getCellById(cell.comparison).name} 的咬合关系。`,
+    `指导我在 3D 模型中定位 ${organelle.name}。`,
   ];
 }
 
@@ -347,8 +308,8 @@ function RightPanel({
     <aside className="right-rail">
       <section className="panel details-panel">
         <div className="panel-heading detail-heading">
-          <span>Organelle Details</span>
-          <button type="button" onClick={() => onToggleFavorite(cell.id)} aria-label="Toggle favorite">
+          <span>牙位详情</span>
+          <button type="button" onClick={() => onToggleFavorite(cell.id)} aria-label="切换收藏">
             <Heart size={22} fill={favorites.has(cell.id) ? "currentColor" : "none"} />
           </button>
         </div>
@@ -369,7 +330,7 @@ function RightPanel({
             </div>
           ))}
           <div>
-            <dt>Label</dt>
+            <dt>标签</dt>
             <dd>
               <span className="mini-toggle is-on" />
               <span className="detail-dot" style={{ background: organelle.color }} />
@@ -380,11 +341,11 @@ function RightPanel({
 
       <section className="panel notes-panel">
         <div className="panel-heading">
-          <span>Biological Notes</span>
+          <span>临床笔记</span>
         </div>
         <p>{organelle.note}</p>
         <div className="fun-fact">
-          <span>Fun Fact: {organelle.fact}</span>
+          <span>小提示：{organelle.fact}</span>
           <Sparkles size={18} />
         </div>
       </section>
@@ -393,39 +354,38 @@ function RightPanel({
         <div className="panel-heading">
           <span>
             <Brain size={17} />
-            AI Tutor
+            AI 导师
           </span>
         </div>
 
         <div className="mastery-meter" style={{ "--progress": `${mastery}%` } as CSSProperties}>
           <div>
             <Gauge size={18} />
-            <span>Mastery</span>
+            <span>掌握程度</span>
             <strong>{mastery}%</strong>
           </div>
           <i>
             <b />
           </i>
           <small>
-            {viewedCellCount}/{cells.length} cells explored · {viewedOrganelleCount}/{totalOrganelleCount} organelles inspected
+            已查看 {viewedCellCount}/{cells.length} 个模型 · 已浏览 {viewedOrganelleCount}/{totalOrganelleCount} 个牙位分区
           </small>
         </div>
 
         <div className="lesson-focus">
           <span>
             <Target size={17} />
-            Current lesson focus
+            当前学习重点
           </span>
           <p>
-            Locate <strong>{organelle.name}</strong>, explain its role, then compare it with the matching structure in{" "}
-            {getCellById(cell.comparison).name}.
+            定位 <strong>{organelle.name}</strong>，了解其排牙要点，然后与 {getCellById(cell.comparison).name} 的对应牙位进行比较。
           </p>
         </div>
 
         <div className="tutor-prompt">
           <span>
             <MessageCircle size={17} />
-            Prompt staged for AI tutor
+            已准备好向 AI 导师提问
           </span>
           <p>{tutorPrompt}</p>
         </div>
@@ -441,7 +401,7 @@ function RightPanel({
 
       <section className="panel occurrence-panel">
         <div className="panel-heading">
-          <span>Where It Occurs</span>
+          <span>临床信息</span>
         </div>
         <div className={`occurrence-art occurrence-${cell.occurrence.motif}`}>
           <span />
@@ -469,7 +429,7 @@ function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
       <div className="panel microscope-panel">
         <div className="panel-heading">
           <span>
-            Microscope View
+            扫描视图
             <Info size={16} />
           </span>
         </div>
@@ -480,15 +440,15 @@ function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
               key={image.label}
               className={`micro-card pattern-${image.pattern}`}
               style={{ "--micro": image.tone } as CSSProperties}
-              onClick={() => onToast(`${image.label} selected.`)}
+              onClick={() => onToast(`已选择 ${image.label}`)}
             >
               <span />
               <strong>{image.label}</strong>
             </button>
           ))}
-          <button type="button" className="micro-card add-card" onClick={() => onToast("Image upload is a planned step.")}>
+          <button type="button" className="micro-card add-card" onClick={() => onToast("图片上传功能开发中")}>
             <Plus size={28} />
-            <strong>Add Image</strong>
+            <strong>添加图片</strong>
           </button>
         </div>
       </div>
@@ -496,7 +456,7 @@ function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
       <div className="panel compare-panel">
         <div className="panel-heading">
           <span>
-            Compare Cells
+            模型对比
             <Info size={16} />
           </span>
         </div>
@@ -505,10 +465,10 @@ function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
             <MiniCell cell={cell} />
             <span>
               <strong>{cell.name}</strong>
-              <em>You are here</em>
+              <em>当前位置</em>
             </span>
           </div>
-          <b>VS</b>
+          <b>对比</b>
           <div>
             <span>
               <strong>{comparedCell.name}</strong>
@@ -518,7 +478,7 @@ function BottomPanels({ cell, onCompare, onToast }: BottomPanelsProps) {
           </div>
         </div>
         <button type="button" className="comparison-button" onClick={onCompare}>
-          Open Comparison View
+          打开对比视图
           <ArrowRight size={20} />
         </button>
       </div>
@@ -543,15 +503,15 @@ function ComparisonModal({ cell, open, onClose }: ComparisonModalProps) {
     comparedCell.organelles.find((item) => item.id === comparedCell.defaultOrganelle) ?? comparedCell.organelles[0];
 
   return (
-    <div className="modal-layer" role="dialog" aria-modal="true" aria-label="Cell comparison">
+    <div className="modal-layer" role="dialog" aria-modal="true" aria-label="模型对比">
       <div className="comparison-modal">
         <button className="modal-close" type="button" onClick={onClose}>
-          Close
+          关闭
         </button>
         <div className="comparison-modal-head">
-          <h3>Comparison View</h3>
+          <h3>对比视图</h3>
           <p>
-            {cell.name} compared with {comparedCell.name}
+            {cell.name} 与 {comparedCell.name} 的对比
           </p>
         </div>
         <div className="comparison-columns">
@@ -564,15 +524,15 @@ function ComparisonModal({ cell, open, onClose }: ComparisonModalProps) {
                 <p>{item.type}</p>
                 <dl>
                   <div>
-                    <dt>Default focus</dt>
+                    <dt>默认牙位</dt>
                     <dd>{organelle.name}</dd>
                   </div>
                   <div>
-                    <dt>Main note</dt>
+                    <dt>分区说明</dt>
                     <dd>{organelle.subtitle}</dd>
                   </div>
                   <div>
-                    <dt>Occurs in</dt>
+                    <dt>临床信息</dt>
                     <dd>{item.occurrence.title}</dd>
                   </div>
                 </dl>
@@ -606,7 +566,7 @@ export default function App() {
   );
   const [comparisonOpen, setComparisonOpen] = useState(false);
   const [tutorPrompt, setTutorPrompt] = useState(
-    `Guide me through finding ${initialCell.organelles[0].name} inside the 3D model.`,
+    `指导我在 3D 模型中定位 ${initialCell.organelles[0].name}。`,
   );
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<number | null>(null);
@@ -668,7 +628,7 @@ export default function App() {
 
   return (
     <div className="app-shell" style={shellStyle}>
-      <Header cell={selectedCell} />
+      <Header />
 
       <div className="app-grid">
         <Sidebar
@@ -693,7 +653,7 @@ export default function App() {
             onAutoRotateChange={setAutoRotate}
             onReset={() => {
               setResetKey((key) => key + 1);
-              showToast("View reset.");
+              showToast("视图已重置");
             }}
             onToast={showToast}
           />
@@ -716,7 +676,7 @@ export default function App() {
           onToggleFavorite={toggleFavorite}
           onTutorPrompt={(prompt) => {
             setTutorPrompt(prompt);
-            showToast("AI tutor prompt staged.");
+            showToast("AI 导师提示已准备");
           }}
         />
       </div>
